@@ -1,0 +1,12 @@
+/* ==========================================================================
+   utilities.css — tiny single-purpose helper classes.
+   Loaded last so they can override component colors when needed.
+   ========================================================================== */
+
+.green-text { color: var(--color-receivable); }   /* money owed to you */
+.orange-text { color: var(--color-payable); }     /* money you owe */
+.muted { color: #9ba2b0; }
+.small-text { font-size: 10px; }
+
+/* Chevron arrow at the end of clickable rows (PersonRow, dashboard rows). */
+.row-chevron { color: #b3b8c4; }

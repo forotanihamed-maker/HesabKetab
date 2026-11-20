@@ -1,0 +1,244 @@
+/* ==========================================================================
+   entries.css — receivable / payable accounts on the person page:
+   tabs, entry cards, payments list, and the receivable/payable groups.
+   Used by: PersonPage, EntryCard.
+   ========================================================================== */
+
+/* ---------- Tabs (active / settled / all) ---------- */
+
+.tabs {
+  display: flex;
+  gap: 5px;
+  margin: -4px 0 13px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.tabs button {
+  padding: 10px 13px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-size: 11px;
+  color: #9299a8;
+}
+
+.tabs button.active {
+  border-bottom-color: var(--color-brand);
+  color: var(--color-brand);
+  font-weight: 700;
+}
+
+/* ---------- Receivable / payable groups on the person page ---------- */
+
+.person-entry-groups {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.person-entry-group { min-width: 0; }
+
+.person-entry-group-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 12px;
+  color: #596274;
+}
+
+.person-entry-group-heading h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.person-entry-group-heading span {
+  font-size: 10px;
+  color: #9aa1b0;
+}
+
+/* Group order in PersonPage.jsx: 1st = receivables (green), 2nd = payables (orange). */
+.person-entry-group:first-child .person-entry-group-heading svg { color: var(--color-receivable); }
+.person-entry-group:nth-child(2) .person-entry-group-heading svg { color: var(--color-payable); }
+
+/* ---------- Entry card ---------- */
+
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.entry-card {
+  padding: 14px;
+  border: 1px solid #eceef3;
+  border-radius: 13px;
+}
+
+.entry-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+/* Arrow icon. Colors (.green / .orange) are defined in cards.css. */
+.entry-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+}
+
+.entry-icon svg { width: 18px; }
+
+.entry-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-title-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.entry-title-line strong { font-size: 14px; }
+
+/* Small badge next to the title: "طلب" / "بدهی" / "تسویه‌شده". */
+.status-pill {
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--color-divider);
+  font-size: 11px;
+  color: #7c8495;
+}
+
+.status-pill.active {
+  background: #eef8f2;
+  color: #1b9868;
+}
+
+.status-pill.settled {
+  background: #f0efff;
+  color: #6e61c9;
+}
+
+.entry-info > small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #9da4b2;
+}
+
+.entry-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 9px;
+  font-size: 12px;
+  color: #858d9e;
+}
+
+.entry-numbers .remaining {
+  font-weight: 700;
+  color: #353e51;
+}
+
+.entry-actions {
+  display: flex;
+  gap: 3px;
+}
+
+/* ---------- Entry footer: payments toggle + payment/settle actions ---------- */
+
+.entry-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 9px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.entry-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtle-btn,
+.settle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+  color: #7d8596;
+}
+
+/* Keep after the shared rule above: only the color differs. */
+.settle-btn { color: var(--color-receivable); }
+
+/* ---------- Payments list (expanded part of the card) ---------- */
+
+.payments-panel {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fafbfe;
+}
+
+.payment-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eceef3;
+}
+
+.payment-row:last-child { border-bottom: 0; }
+
+.payment-row strong {
+  display: block;
+  font-size: 11px;
+}
+
+.payment-row small {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  color: #9ba2b0;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 680px) {
+  .person-entry-groups { gap: 14px; }
+  .person-entry-group-heading h3 { font-size: 13px; }
+
+  .entry-card { padding: 11px; }
+  .entry-numbers { gap: 8px; }
+  .entry-actions { gap: 0; }
+
+  /* Footer buttons wrap onto a second line instead of overflowing. */
+  .entry-footer {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .entry-footer-actions { flex-wrap: wrap; }
+}
+
+@media (max-width: 380px) {
+  .entry-footer-actions { gap: 2px; }
+
+  .subtle-btn,
+  .settle-btn { font-size: 9px; }
+}

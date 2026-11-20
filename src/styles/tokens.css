@@ -1,0 +1,42 @@
+/* ==========================================================================
+   tokens.css — design tokens (colors + font) for the whole app.
+
+   Rule of thumb for the team:
+   - If a color is used in 3+ places or carries a meaning (brand, receivable,
+     payable), it lives here as a variable.
+   - One-off tints (a hover shade used once) stay as literals next to the rule
+     that uses them, so this file does not become a dumping ground.
+
+   Breakpoints (CSS variables cannot be used inside @media, so they are
+   documented here and repeated in each file):
+     950px  tablet        — sidebar gets narrower
+     680px  mobile        — sidebar hidden, bottom navigation appears
+     390px  small phone   — dashboard rows wrap (dashboard.css only)
+     380px  tiny phone    — icon-only header button, tighter footer actions
+   ========================================================================== */
+
+:root {
+  /* Typography */
+  --font-sans: 'Vazirmatn', Tahoma, sans-serif;
+
+  /* Brand */
+  --color-brand: #4f46e5;
+  --color-brand-dark: #4338ca;     /* hover state of the primary button */
+  --color-focus: #c7d2fe;          /* keyboard focus ring */
+
+  /* Surfaces and text */
+  --color-bg: #f6f7fb;             /* page background */
+  --color-surface: #fff;           /* cards, modals, inputs */
+  --color-ink: #20283a;            /* main text */
+  --color-text-muted: #9299aa;     /* secondary text */
+
+  /* Lines */
+  --color-border: #e9ebf2;         /* card borders, top bar, bottom nav */
+  --color-divider: #f0f1f5;        /* thin separators inside cards */
+
+  /* Meaning: money owed TO the user (green) and BY the user (orange) */
+  --color-receivable: #159b67;
+  --color-receivable-soft: #e9f8f0;
+  --color-payable: #dc8737;
+  --color-payable-soft: #fff3e8;
+}

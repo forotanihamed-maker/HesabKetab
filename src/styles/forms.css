@@ -1,0 +1,132 @@
+/* ==========================================================================
+   forms.css — search box and form fields (used in modals and BackupPage).
+   ========================================================================== */
+
+/* ---------- Search box ---------- */
+
+.search-box {
+  height: 43px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 13px;
+  padding: 0 12px;
+  border: 1px solid #e8ebf2;
+  border-radius: 11px;
+  background: #fbfcfe;
+  color: #a3a9b7;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.search-box:focus-within {
+  background: var(--color-surface);
+  border-color: #aaa5f0;
+  box-shadow: 0 0 0 4px rgba(99, 91, 220, .08);
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+}
+
+/* The small "clear" (x) button. */
+.search-box button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Form field: label text + input/textarea ---------- */
+
+.field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.field > span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #626b7c;
+}
+
+/* The red asterisk of required fields. */
+.field > span b { color: #e05b5b; }
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #e4e7ee;
+  border-radius: 10px;
+  outline: 0;
+  background: var(--color-surface);
+  font-size: 14px;
+  color: #30394b;
+}
+
+.field textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus { border-color: #8982ed; }
+
+/* Invalid input (set by PersianDateInput via aria-invalid).
+   !important so the red border also wins over the focus color above. */
+input[aria-invalid="true"] {
+  border-color: #dc6b6b !important;
+  box-shadow: 0 0 0 3px rgba(220, 107, 107, .12) !important;
+}
+
+/* ---------- Two-option switch (receivable / payable) ---------- */
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.segmented button {
+  padding: 10px 5px;
+  border: 1px solid #e5e7ef;
+  border-radius: 9px;
+  background: var(--color-surface);
+  font-size: 10px;
+  color: #777f90;
+}
+
+.segmented button.selected.green {
+  border-color: #8ed7b3;
+  background: #effaf4;
+  color: #148d5d;
+}
+
+.segmented button.selected.orange {
+  border-color: #f1c18e;
+  background: #fff7ef;
+  color: #c5792b;
+}
+
+/* ---------- Helper text under fields ---------- */
+
+.form-hint {
+  padding: 10px;
+  border-radius: 9px;
+  background: #f7f8fc;
+  font-size: 10px;
+  line-height: 1.9;
+  color: #858d9e;
+}
+
+/* Result message of the backup page (success = green, error = orange via utilities). */
+.backup-status { margin: 14px 0 0; }

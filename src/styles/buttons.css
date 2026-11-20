@@ -1,0 +1,69 @@
+/* ==========================================================================
+   buttons.css — shared buttons.
+   .primary-btn  main action (filled)         .outline-btn  secondary action
+   .text-btn     inline link-like button      .icon-btn     square icon-only button
+   Entry-specific small buttons (.subtle-btn, .settle-btn) live in entries.css.
+   ========================================================================== */
+
+.primary-btn,
+.outline-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.primary-btn {
+  border: 0;
+  background: linear-gradient(135deg, #6258e6, #4f46d5);
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(79, 70, 229, .18);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.primary-btn:hover {
+  background: var(--color-brand-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, .22);
+}
+
+.outline-btn {
+  border: 1px solid #e4e7ef;
+  background: var(--color-surface);
+  color: #596174;
+}
+
+.text-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 0;
+  background: transparent;
+  color: var(--color-brand);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #9aa1b0;
+}
+
+.icon-btn:hover { background: #f3f4f8; }
+
+/* Destructive icon button (delete). */
+.icon-btn.danger:hover {
+  color: #df5555;
+  background: #fff0f0;
+}

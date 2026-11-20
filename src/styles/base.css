@@ -1,0 +1,41 @@
+/* ==========================================================================
+   base.css — document-level defaults. No component classes here.
+   ========================================================================== */
+
+:root {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-size: 15px;
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+/* Form controls inherit the page font instead of the browser default. */
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+/* Visible keyboard focus for accessibility. */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Respect the "reduce motion" system setting. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}

@@ -1,0 +1,368 @@
+/* ==========================================================================
+   layout.css — app frame: top bar, brand, sidebar, mobile bottom navigation,
+   page heading.
+   Used by: AppHeader, Sidebar, MobileNavigation, every page's .page-heading.
+   ========================================================================== */
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Keeps the content aligned with .layout (max-width 1240px) on wide screens. */
+  padding: 0 max(calc((100vw - 1240px) / 2), 28px);
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid #e7eaf1;
+  box-shadow: 0 3px 18px rgba(28, 39, 68, .025);
+}
+
+.topbar-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #8b93a5;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ---------- Brand (logo + name) ---------- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: right;
+  cursor: pointer;
+}
+
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: #fff;
+  background: linear-gradient(145deg, #7168ed 0%, #4f46c9 100%);
+  box-shadow: 0 6px 15px rgba(79, 70, 229, .2), inset 0 1px 0 rgba(255, 255, 255, .24);
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.brand-name {
+  display: block;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -.55px;
+  white-space: nowrap;
+  color: var(--color-ink);
+}
+
+.brand-name-accent { color: #5b52d8; }
+
+.brand-copy small {
+  display: block;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: #8791a4;
+}
+
+/* ---------- Page grid: sidebar + content ---------- */
+
+.layout {
+  max-width: 1320px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 30px;
+  padding: 30px 28px 60px;
+}
+
+.main-content {
+  min-width: 0;            /* lets wide children shrink instead of overflowing */
+  padding-bottom: 24px;
+}
+
+/* ---------- Sidebar (desktop navigation) ---------- */
+
+.sidebar {
+  align-self: start;
+  position: sticky;
+  top: 106px;
+  padding-top: 5px;
+}
+
+.side-label {
+  padding: 0 12px 12px;
+  font-size: 12px;
+  color: #a0a6b5;
+}
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 5px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #70798c;
+  font-size: 14px;
+  text-align: right;
+  transition: color .18s ease, background .18s ease, transform .18s ease;
+}
+
+/* Keep .active BEFORE :hover — they have equal weight, so the later one wins when hovering the active item. */
+.nav-item.active {
+  background: #eef2ff;
+  color: var(--color-brand);
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 #665ce7;
+}
+
+.nav-item:hover {
+  background: #f0f1f8;
+  color: var(--color-brand);
+}
+
+.sidebar-tip {
+  display: flex;
+  gap: 9px;
+  margin-top: 34px;
+  padding: 15px;
+  border: 1px solid #e8eaf2;
+  border-radius: 14px;
+  background: var(--color-surface);
+  font-size: 11px;
+  line-height: 2;
+  color: #8b93a5;
+}
+
+.sidebar-tip svg {
+  flex-shrink: 0;
+  color: #818cf8;
+}
+
+/* ---------- Page heading (title card at the top of every page) ---------- */
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+  padding: 22px 24px;
+  border: 1px solid #e9eaf4;
+  border-radius: 19px;
+  background:
+    radial-gradient(circle at 95% 10%, rgba(111, 101, 232, .10), transparent 30%),
+    linear-gradient(115deg, #fff 0%, #fbfbff 100%);
+  box-shadow: 0 8px 26px rgba(32, 40, 68, .035);
+}
+
+/* Small label above a title, with a dot in front of it. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1px;
+  color: #655bd5;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8178ed;
+  box-shadow: 0 0 0 4px #eeedff;
+}
+
+/* Title and subtitle are shared with the person page (.person-title). */
+.page-heading h1,
+.person-title h1 {
+  margin: 5px 0 3px;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.page-heading h1 {
+  color: var(--color-ink);
+  letter-spacing: -.4px;
+}
+
+.page-heading p,
+.person-title p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.page-heading p { color: #7f899c; }
+
+/* Group of action buttons (page heading, cards). */
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ---------- Mobile bottom navigation (hidden on desktop) ---------- */
+
+.mobile-nav {
+  display: none;
+  background: rgba(255, 255, 255, .96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -6px 22px rgba(25, 35, 60, .045);
+}
+
+.mobile-nav button {
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 950px) {
+  .topbar { padding: 0 20px; }
+
+  .layout {
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 20px;
+    padding: 24px 18px;
+  }
+}
+
+/* Mobile: no sidebar, bottom navigation instead */
+@media (max-width: 680px) {
+  .topbar {
+    height: 64px;
+    padding: 0 16px;
+  }
+
+  .live-dot { width: 8px; height: 8px; }
+
+  .brand { gap: 10px; }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    border-radius: 13px;
+  }
+
+  .brand-name { font-size: 18px; }
+  .brand-copy small { font-size: 10px; }
+
+  .layout {
+    display: block;
+    padding: 17px 13px 94px;   /* bottom padding leaves room for the fixed bottom nav */
+  }
+
+  .sidebar { display: none; }
+
+  .page-heading {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 17px 15px;
+    border-radius: 16px;
+    box-shadow: 0 5px 17px rgba(32, 40, 68, .03);
+  }
+
+  .page-heading h1 {
+    font-size: 23px;
+    letter-spacing: -.2px;
+  }
+
+  .page-heading p {
+    max-width: 260px;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  /* Main action button of the heading becomes compact. */
+  .page-heading > .primary-btn {
+    padding: 10px 11px;
+    border-radius: 10px;
+    font-size: 10px;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    height: 66px;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid var(--color-border);
+    padding-bottom: env(safe-area-inset-bottom);   /* iPhone home indicator / Android gesture bar */
+  }
+
+  .mobile-nav button {
+    min-width: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: #9ba2b1;
+  }
+
+  .mobile-nav button svg { width: 19px; }
+
+  .mobile-nav button.selected {
+    color: #5146db;
+    font-weight: 700;
+  }
+}
+
+/* Tiny phones: the heading button shows only its icon */
+@media (max-width: 380px) {
+  .page-heading > .primary-btn {
+    gap: 0;
+    font-size: 0;
+  }
+
+  .page-heading > .primary-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}

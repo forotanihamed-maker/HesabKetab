@@ -1,0 +1,219 @@
+/* ==========================================================================
+   cards.css — generic building blocks used on many pages:
+   summary cards (the colored stat tiles), content cards (white panels),
+   section headings and empty states.
+   ========================================================================== */
+
+/* ---------- Summary cards (stat tiles) ---------- */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid var(--color-border);
+  border-radius: 17px;
+  background: var(--color-surface);
+  box-shadow: 0 5px 18px rgba(32, 40, 68, .025);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+/* Thin gradient line on top of the card. */
+.summary-card::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(99, 91, 220, .55), rgba(99, 91, 220, 0));
+  opacity: .7;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  border-color: #dedff0;
+  box-shadow: 0 10px 24px rgba(32, 40, 68, .06);
+}
+
+.summary-icon {
+  width: 39px;
+  height: 39px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 15px;
+  border-radius: 13px;
+}
+
+.summary-icon svg { width: 18px; }
+
+/* Icon tones. .green / .orange are shared with .entry-icon (entries.css). */
+.summary-icon.green,
+.entry-icon.green {
+  background: var(--color-receivable-soft);
+  color: #16a36a;
+}
+
+.summary-icon.orange,
+.entry-icon.orange {
+  background: var(--color-payable-soft);
+  color: #e58a32;
+}
+
+.summary-icon.blue {
+  background: #edf4ff;
+  color: #4f83d9;
+}
+
+.summary-icon.purple {
+  background: #f3edff;
+  color: #9064d9;
+}
+
+.summary-title {
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #7c879a;
+}
+
+.summary-card strong {
+  display: block;
+  overflow: hidden;
+  font-size: 19px;
+  letter-spacing: -.25px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #252d40;
+}
+
+.summary-card small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #a4aaba;
+}
+
+/* ---------- Content card (white panel) ---------- */
+
+.content-card {
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: var(--color-surface);
+  box-shadow: 0 5px 20px rgba(32, 40, 68, .025);
+}
+
+/* ---------- Section headings inside cards ---------- */
+
+/* .section-heading: title + optional side content inside a card.
+   .section-toolbar: same idea but sits between cards and holds an action button. */
+.section-heading,
+.section-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-heading { margin-bottom: 18px; }
+.section-toolbar { margin: 0 0 13px; }
+
+.section-heading h2,
+.section-toolbar h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+}
+
+.section-heading h2 {
+  letter-spacing: -.15px;
+  color: #252d40;
+}
+
+.section-heading p,
+.section-toolbar p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.section-heading p {
+  margin-top: 5px;
+  color: #8a94a6;
+}
+
+.section-toolbar p { color: #9aa1b0; }
+
+/* ---------- Empty state (icon + message when a list has no items) ---------- */
+
+.empty-state {
+  padding: 40px 15px;
+  text-align: center;
+  color: #9ba2b0;
+}
+
+.empty-state > div {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+  border-radius: 16px;
+  background: #f4f5fa;
+  color: #9da4b4;
+}
+
+.empty-state strong {
+  font-size: 13px;
+  color: #60697b;
+}
+
+.empty-state p {
+  margin: 5px 0 0;
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 950px) {
+  .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  .summary-grid {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .summary-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .summary-icon { margin-bottom: 11px; }
+  .summary-title { font-size: 12px; }
+  .summary-card strong { font-size: 16px; }
+  .summary-card small { font-size: 11px; }
+
+  .content-card {
+    margin-bottom: 13px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .section-heading h2 { font-size: 16px; }
+
+  .section-toolbar { align-items: flex-start; }
+
+  .section-toolbar .primary-btn {
+    padding: 9px;
+    font-size: 10px;
+  }
+}

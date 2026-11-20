@@ -44,7 +44,7 @@ export default function BackupPage({ data, onImport }) {
           <button className="outline-btn" onClick={() => fileInputRef.current?.click()}><Upload size={18} /> بازیابی از فایل</button>
         </div>
         <input ref={fileInputRef} type="file" accept="application/json,.json" onChange={handleFileChosen} hidden />
-        {message && <p className={`form-hint ${isError ? 'orange-text' : 'green-text'}`} role="status">{message}</p>}
+        {message && <p className={`form-hint backup-status ${isError ? 'orange-text' : 'green-text'}`} role="status">{message}</p>}
       </section>
     </>
   )

@@ -1,0 +1,173 @@
+/* ==========================================================================
+   dashboard.css — "receivables" / "payables" lists on the home page.
+   Used by: DashboardEntries in HomePage.jsx.
+   The heading modifier comes from JSX: .green-text (receivables) or
+   .orange-text (payables) on .dashboard-section-heading.
+   ========================================================================== */
+
+.dashboard-section-heading {
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f1f6;
+}
+
+/* Total amount badge next to the section title. */
+.dashboard-section-total {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #eff9f3;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Payables section gets an orange badge. */
+.dashboard-section-heading:has(.orange-text) .dashboard-section-total { background: #fff5eb; }
+
+.dashboard-entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* One clickable row = one account. */
+.dashboard-entry {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 15px;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+  background: var(--color-surface);
+  box-shadow: 0 2px 7px rgba(25, 35, 60, .015);
+  color: inherit;
+  text-align: right;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+}
+
+.dashboard-entry:hover {
+  transform: translateY(-1px);
+  border-color: #dcdff0;
+  background: #fdfdff;
+  box-shadow: 0 7px 16px rgba(35, 43, 75, .045);
+}
+
+.dashboard-entry-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+}
+
+.dashboard-entry-icon.receivable {
+  background: var(--color-receivable-soft);
+  color: var(--color-receivable);
+}
+
+.dashboard-entry-icon.payable {
+  background: var(--color-payable-soft);
+  color: var(--color-payable);
+}
+
+/* Middle part: person name, title, date/note. */
+.dashboard-entry-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard-entry-info strong {
+  overflow: hidden;
+  font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #30394d;
+}
+
+.dashboard-entry-info small {
+  font-size: 12px;
+  color: #8b95a7;
+}
+
+.dashboard-entry-info .dashboard-entry-note {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Remaining balance and original amount. */
+.dashboard-entry-amounts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.dashboard-entry-amounts strong {
+  font-size: 14px;
+  letter-spacing: -.1px;
+}
+
+.dashboard-entry-amounts small {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 680px) {
+  .dashboard-section-heading { padding-bottom: 12px; }
+
+  .dashboard-section-total {
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  .dashboard-entry {
+    gap: 9px;
+    padding: 14px 15px;
+    border-radius: 12px;
+  }
+
+  .dashboard-entry-icon {
+    width: 35px;
+    height: 35px;
+    flex-basis: 35px;
+  }
+
+  .dashboard-entry-info strong { font-size: 13px; }
+  .dashboard-entry-info small { font-size: 11px; }
+  .dashboard-entry-amounts strong { font-size: 12px; }
+  .dashboard-entry-amounts small { font-size: 10px; }
+}
+
+/* Small phones: amounts drop below the name instead of squeezing it. */
+@media (max-width: 390px) {
+  .dashboard-section-heading { align-items: flex-start; }
+
+  .dashboard-section-total {
+    max-width: 48%;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  .dashboard-entry { flex-wrap: wrap; }
+
+  .dashboard-entry-info {
+    width: calc(100% - 55px);
+    flex: 1 1 calc(100% - 55px);
+  }
+
+  .dashboard-entry-amounts { margin-right: 44px; }
+  .dashboard-entry .row-chevron { margin-right: auto; }
+}
