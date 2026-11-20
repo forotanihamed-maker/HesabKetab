@@ -63,7 +63,7 @@ export default function App() {
           {page === PAGE.HOME && <HomePage
             data={ledger.data} totals={ledger.totals} people={filteredPeople}
             search={search} onSearch={setSearch} onOpenPerson={navigateToPerson}
-            onAddPerson={() => openModal('person')} onShowPeople={() => navigate(PAGE.PEOPLE)}
+            onAddPerson={() => openModal('person')} onShowPeople={() => navigate(PAGE.PEOPLE)} onQuickEntry={() => openModal('quickEntry')}
           />}
           {page === PAGE.PEOPLE && <PeoplePage
             people={filteredPeople} entries={ledger.data.entries} search={search}
@@ -91,7 +91,7 @@ export default function App() {
       <ModalHost modal={modal} onClose={closeModal}
         onCreatePerson={submitPerson} onCreateEntry={submitEntry}
         onAddPayment={submitPayment} onUpdateEntry={submitEntryEdit}
-        onUpdatePerson={submitPersonEdit}
+        onUpdatePerson={submitPersonEdit} people={ledger.data.people} onQuickEntry={ledger.createQuickEntry}
       />
       <Toast message={toast} onClose={clearToast} />
     </div>

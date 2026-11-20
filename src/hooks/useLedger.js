@@ -61,6 +61,28 @@ export function useLedger(notify, navigateToPerson) {
     return true
   }
 
+  function createQuickEntry(form) {
+    const amount = Number(form.amount)
+    if (!form.title.trim() || !Number.isFinite(amount) || amount <= 0 || (!form.personId && !form.name.trim())) {
+      notify('نام شخص، عنوان و مبلغ معتبر را وارد کنید')
+      return false
+    }
+    let personId = form.personId
+    let personToCreate = null
+    if (!personId) {
+      const existing = data.people.find(person => person.name.trim().toLocaleLowerCase() === form.name.trim().toLocaleLowerCase())
+      if (existing) personId = existing.id
+      else personToCreate = { id: uid(), name: form.name.trim(), phone: '', note: '', createdAt: new Date().toISOString() }, personId = personToCreate.id
+    }
+    const entry = { id: uid(), personId, title: form.title.trim(), direction: form.direction, amount, date: form.date, note: (form.note || '').trim(), status: 'active', payments: [], createdAt: new Date().toISOString(), kind: 'direct' }
+    setData(current => {
+      const updated = { ...current, people: personToCreate ? [...current.people, personToCreate] : current.people, entries: [entry, ...current.entries] }
+      return withEvent(updated, personId, `${entry.direction === 'receivable' ? 'طلب' : 'بدهی'} جدید ثبت شد: ${entry.title}`, amount)
+    })
+    notify(personToCreate ? 'شخص و حساب جدید ثبت شدند' : entry.direction === 'receivable' ? 'طلب ثبت شد' : 'بدهی ثبت شد')
+    return true
+  }
+
   function addPayment(entry, form) {
     const amount = Number(form.amount)
     if (!Number.isFinite(amount) || amount <= 0 || amount > getEntryBalance(entry)) {
@@ -145,5 +167,5 @@ export function useLedger(notify, navigateToPerson) {
     }
   }
 
-  return { data, totals, createPerson, createEntry, addPayment, updateEntry, settleEntry, deleteEntry, deletePayment, updatePerson, getPersonTotals }
+  return { data, totals, createPerson, createEntry, createQuickEntry, addPayment, updateEntry, settleEntry, deleteEntry, deletePayment, updatePerson, getPersonTotals }
 }
