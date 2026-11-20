@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { today } from '../../utils'
 import ModalShell from './ModalShell'
 import FormField from './FormField'
+import AmountInput from './AmountInput'
+import PersianDateInput from './PersianDateInput'
 
 export default function EntryFormModal({ entry, onClose, onSubmit }) {
   const [form, setForm] = useState(() => ({
@@ -17,8 +19,8 @@ export default function EntryFormModal({ entry, onClose, onSubmit }) {
         <button type="button" className={form.direction === 'payable' ? 'selected orange' : ''} onClick={() => update('direction', 'payable')}>بدهی؛ باید پرداخت شود</button>
       </div></FormField>
       <FormField label="عنوان / دلیل حساب" required><input value={form.title} onChange={event => update('title', event.target.value)} placeholder="مثلاً بابت خرید قبلی" required /></FormField>
-      <FormField label="مبلغ کل (تومان)" required><input type="number" min="1" step="1" value={form.amount} onChange={event => update('amount', event.target.value)} placeholder="مبلغ به تومان" required /></FormField>
-      <FormField label="تاریخ ثبت" required><input type="date" value={form.date} onChange={event => update('date', event.target.value)} required /></FormField>
+      <FormField label="مبلغ کل (تومان)" required><AmountInput value={form.amount} onChange={value => update('amount', value)} required /></FormField>
+      <FormField label="تاریخ ثبت (شمسی)" required><PersianDateInput value={form.date} onChange={value => update('date', value)} required /></FormField>
       <FormField label="توضیحات"><textarea value={form.note} onChange={event => update('note', event.target.value)} placeholder="اختیاری" /></FormField>
       <p className="form-hint">{form.direction === 'receivable' ? 'این مبلغ به مجموع طلب‌ها اضافه می‌شود و پرداخت‌های بعدی از مانده آن کم می‌شوند.' : 'این مبلغ به مجموع بدهی‌ها اضافه می‌شود و با ثبت پرداخت، مانده آن کاهش می‌یابد.'}</p>
       <div className="modal-actions"><button type="button" className="outline-btn" onClick={onClose}>انصراف</button><button className="primary-btn" type="submit">{entry ? 'ذخیره تغییرات' : 'ثبت حساب'}</button></div>
