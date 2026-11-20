@@ -284,3 +284,25 @@ body { background: var(--dashboard-bg); color: var(--dashboard-ink); }
   .brand-copy small { font-size: 10px !important; }
 }
 input[aria-invalid="true"]{border-color:#dc6b6b!important;box-shadow:0 0 0 3px rgba(220,107,107,.12)}
+
+/* Homepage separate receivable/payable details and mobile refinement */
+.dashboard-accounts { overflow: hidden; }
+.dashboard-section-heading { align-items: center; }
+.dashboard-section-total { direction: rtl; }
+.dashboard-entry { font-family: inherit; cursor: pointer; }
+.dashboard-entry:disabled { opacity: .65; cursor: default; }
+.home-actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+@media (max-width: 680px) {
+  .home-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .page-heading { flex-wrap: wrap; }
+  .home-actions .primary-btn, .home-actions .outline-btn { min-width: 0; padding: 10px 8px; white-space: normal; font-size: 12px; }
+  .dashboard-accounts { padding: 14px; }
+  .dashboard-entry { min-width: 0; }
+  .dashboard-entry-amounts { max-width: 100%; }
+  .dashboard-entry-amounts strong, .dashboard-entry-amounts small { overflow-wrap: anywhere; }
+}
+@media (max-width: 360px) {
+  .home-actions { grid-template-columns: 1fr; }
+  .dashboard-entry { gap: 7px; }
+  .dashboard-entry-amounts { margin-right: 0; }
+}
