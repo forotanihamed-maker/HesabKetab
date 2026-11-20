@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { today } from '../../utils'
 import ModalShell from './ModalShell'
 import FormField from './FormField'
+import AmountInput from './AmountInput'
+import PersianDateInput from './PersianDateInput'
 
 export default function HomeEntryModal({ people, onClose, onSubmit }) {
   const [query, setQuery] = useState('')
@@ -22,8 +24,8 @@ export default function HomeEntryModal({ people, onClose, onSubmit }) {
     </FormField>
     <FormField label="نوع حساب"><div className="segmented"><button type="button" className={form.direction==='receivable'?'selected green':''} onClick={()=>update('direction','receivable')}>طلب (دریافت)</button><button type="button" className={form.direction==='payable'?'selected orange':''} onClick={()=>update('direction','payable')}>بدهی (پرداخت)</button></div></FormField>
     <FormField label="عنوان / دلیل" required><input value={form.title} onChange={e=>update('title',e.target.value)} placeholder="مثلاً خرید دمنوش" required/></FormField>
-    <FormField label="مبلغ (تومان)" required><input type="number" min="1" value={form.amount} onChange={e=>update('amount',e.target.value)} required/></FormField>
-    <FormField label="تاریخ" required><input type="date" value={form.date} onChange={e=>update('date',e.target.value)} required/></FormField>
+    <FormField label="مبلغ (تومان)" required><AmountInput value={form.amount} onChange={value=>update('amount',value)} required /></FormField>
+    <FormField label="تاریخ (شمسی)" required><PersianDateInput value={form.date} onChange={value=>update('date',value)} required /></FormField>
     <FormField label="توضیحات"><textarea value={form.note} onChange={e=>update('note',e.target.value)} /></FormField>
     <div className="modal-actions"><button type="button" className="outline-btn" onClick={onClose}>انصراف</button><button type="submit" className="primary-btn" disabled={!newPerson&&!personId}>ثبت حساب</button></div>
   </form></ModalShell>
