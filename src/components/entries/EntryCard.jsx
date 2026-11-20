@@ -37,7 +37,7 @@ export default function EntryCard({ entry, balance, onPayment, onEdit, onSettle,
         {entry.status === 'active' && (
           <div className="entry-footer-actions">
             <button className="subtle-btn" onClick={onPayment}><CirclePlus size={15} /> ثبت پرداخت</button>
-            {balance === 0 && <button className="settle-btn" onClick={onSettle}><CheckCircle2 size={15} /> تسویه حساب</button>}
+            <button className="settle-btn" onClick={onSettle}><CheckCircle2 size={15} /> تسویه مستقیم</button>
           </div>
         )}
       </div>

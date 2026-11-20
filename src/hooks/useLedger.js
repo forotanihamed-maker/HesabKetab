@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { loadLedger, saveLedger } from '../services/storage'
-import { sum, toman, uid } from '../utils'
+import { sum, toman, uid, today } from '../utils'
 
 export function getEntryBalance(entry) {
   const paid = sum(entry.payments || [], payment => Number(payment.amount))
@@ -114,16 +114,14 @@ export function useLedger(notify, navigateToPerson) {
   }
 
   function settleEntry(entry) {
-    if (getEntryBalance(entry) !== 0) {
-      notify('برای تسویه، ابتدا مانده حساب باید صفر شود')
-      return
-    }
-    if (!window.confirm('این حساب تسویه و از فهرست فعال خارج شود؟ سابقه آن حذف نخواهد شد.')) return
+    const remaining = getEntryBalance(entry)
+    if (!window.confirm(remaining > 0 ? `مانده ${toman(remaining)} به‌عنوان پرداخت نهایی ثبت و حساب تسویه شود؟` : 'این حساب تسویه و از فهرست فعال خارج شود؟')) return
+    const settlementPayment = remaining > 0 ? { id: uid(), amount: remaining, date: today(), note: 'تسویه کامل', createdAt: new Date().toISOString() } : null
     setData(current => {
-      const updated = { ...current, entries: current.entries.map(item => item.id === entry.id ? { ...item, status: 'settled', settledAt: new Date().toISOString() } : item) }
-      return withEvent(updated, entry.personId, `حساب «${entry.title}» تسویه شد`)
+      const updated = { ...current, entries: current.entries.map(item => item.id === entry.id ? { ...item, payments: settlementPayment ? [...(item.payments || []), settlementPayment] : (item.payments || []), status: 'settled', settledAt: new Date().toISOString() } : item) }
+      return withEvent(updated, entry.personId, `حساب «${entry.title}» تسویه شد`, remaining || null)
     })
-    notify('حساب به بخش تسویه‌شده منتقل شد')
+    notify('حساب تسویه شد و در سوابق باقی ماند')
   }
 
   function deleteEntry(entry) {

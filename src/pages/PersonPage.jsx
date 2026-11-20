@@ -11,6 +11,13 @@ export default function PersonPage({ person, entries, events, receivable, payabl
   const activeEntries = entries.filter(entry => entry.status === 'active')
   const settledEntries = entries.filter(entry => entry.status === 'settled')
   const visibleEntries = activeTab === 'active' ? activeEntries : activeTab === 'settled' ? settledEntries : entries
+  const receivableEntries = visibleEntries.filter(entry => entry.direction === 'receivable')
+  const payableEntries = visibleEntries.filter(entry => entry.direction === 'payable')
+  const renderEntryList = list => list.length ? <div className="entry-list">{list.map(entry => (
+    <EntryCard key={entry.id} entry={entry} balance={Math.max(0, Number(entry.amount) - (entry.payments || []).reduce((total, payment) => total + Number(payment.amount), 0))}
+      onPayment={() => onAddPayment(entry)} onEdit={() => onEditEntry(entry)} onSettle={() => onSettle(entry)}
+      onDelete={() => onDeleteEntry(entry)} onDeletePayment={payment => onDeletePayment(entry, payment)} />
+  ))}</div> : <EmptyState icon={<CreditCard />} title="حسابی در این بخش نیست" text="حساب‌های این دسته در این فیلتر نمایش داده نمی‌شوند." />
 
   return (
     <>
@@ -37,15 +44,16 @@ export default function PersonPage({ person, entries, events, receivable, payabl
           <button className={activeTab === 'settled' ? 'active' : ''} onClick={() => setActiveTab('settled')}>تسویه‌شده ({settledEntries.length})</button>
           <button className={activeTab === 'all' ? 'active' : ''} onClick={() => setActiveTab('all')}>همه ({entries.length})</button>
         </div>
-        {visibleEntries.length ? (
-          <div className="entry-list">
-            {visibleEntries.map(entry => (
-              <EntryCard key={entry.id} entry={entry} balance={Math.max(0, Number(entry.amount) - (entry.payments || []).reduce((total, payment) => total + Number(payment.amount), 0))}
-                onPayment={() => onAddPayment(entry)} onEdit={() => onEditEntry(entry)} onSettle={() => onSettle(entry)}
-                onDelete={() => onDeleteEntry(entry)} onDeletePayment={payment => onDeletePayment(entry, payment)} />
-            ))}
-          </div>
-        ) : <EmptyState icon={<CreditCard />} title="حسابی در این بخش نیست" text={activeTab === 'settled' ? 'حساب‌های تسویه‌شده اینجا نمایش داده می‌شوند.' : 'از ثبت بدهی یا طلب شروع کنید.'} />}
+        <div className="person-entry-groups">
+          <section className="person-entry-group">
+            <div className="person-entry-group-heading"><ArrowDownLeft size={18}/><h3>طلب‌ها</h3><span>{receivableEntries.length} حساب</span></div>
+            {renderEntryList(receivableEntries)}
+          </section>
+          <section className="person-entry-group">
+            <div className="person-entry-group-heading"><ArrowUpRight size={18}/><h3>بدهی‌ها</h3><span>{payableEntries.length} حساب</span></div>
+            {renderEntryList(payableEntries)}
+          </section>
+        </div>
       </section>
 
       <section className="content-card">
