@@ -135,7 +135,7 @@
 
   .dashboard-entry {
     gap: 9px;
-    padding: 14px 15px;
+    padding: 11px 9px;      /* tighter rows so name and amount have room on a phone */
     border-radius: 12px;
   }
 

@@ -274,6 +274,8 @@
     padding: 0 16px;
   }
 
+  /* Hide the "data is stored on this device" text; only the green dot stays. */
+  .topbar-note { font-size: 0; }
   .live-dot { width: 8px; height: 8px; }
 
   .brand { gap: 10px; }

@@ -237,6 +237,7 @@
 }
 
 @media (max-width: 380px) {
+  .entry-title-line strong { font-size: 11px; }
   .entry-footer-actions { gap: 2px; }
 
   .subtle-btn,
