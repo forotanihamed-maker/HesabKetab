@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { today, toman } from '../../utils'
-import { getEntryBalance } from '../../hooks/useLedger'
+import { getEntryBalance } from '../../domain/ledger'
 import ModalShell from './ModalShell'
 import FormField from './FormField'
 import AmountInput from './AmountInput'

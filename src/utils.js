@@ -1,4 +1,6 @@
-export const toman = (value) => new Intl.NumberFormat('fa-IR').format(Number(value || 0)) + ' تومان'
+const persianNumber = new Intl.NumberFormat('fa-IR')
+export const formatNumber = (value) => persianNumber.format(Number(value || 0))
+export const toman = (value) => formatNumber(value) + ' تومان'
 export const normalizeDigits = (value) => String(value ?? '')
   .replace(/[۰-۹]/g, digit => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(digit)))
   .replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)))
@@ -43,7 +45,7 @@ export const jalaliToGregorian = (input) => {
 }
 
 export const dateLabel = (value) => formatPersianDate(value)
-export const uid = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+export const uid = () => (globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`)
 export const today = () => {
   const date = new Date()
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`

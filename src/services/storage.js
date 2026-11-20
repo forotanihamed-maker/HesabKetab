@@ -1,11 +1,12 @@
-import { INITIAL_DATA, STORAGE_KEY } from '../constants/app'
+import { STORAGE_KEY } from '../constants/app'
+import { normalizeLedger } from '../domain/ledger'
 
 export function loadLedger() {
   try {
     const savedData = localStorage.getItem(STORAGE_KEY)
-    return savedData ? { ...INITIAL_DATA, ...JSON.parse(savedData) } : INITIAL_DATA
+    return normalizeLedger(savedData ? JSON.parse(savedData) : null)
   } catch {
-    return INITIAL_DATA
+    return normalizeLedger(null)
   }
 }
 

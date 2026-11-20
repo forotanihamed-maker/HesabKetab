@@ -1,10 +1,11 @@
-import { Activity, LayoutDashboard, Users } from 'lucide-react'
+import { Activity, ShieldCheck, LayoutDashboard, Users } from 'lucide-react'
 import { PAGE } from '../../constants/app'
 
 const items = [
   { page: PAGE.HOME, label: 'خانه', icon: LayoutDashboard },
   { page: PAGE.PEOPLE, label: 'اشخاص', icon: Users },
   { page: PAGE.ACTIVITY, label: 'تاریخچه', icon: Activity },
+  { page: PAGE.BACKUP, label: 'پشتیبان', icon: ShieldCheck },
 ]
 
 export default function MobileNavigation({ currentPage, onNavigate }) {

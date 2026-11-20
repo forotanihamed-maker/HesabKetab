@@ -1,6 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
 import { sum, toman } from '../../utils'
-import { getEntryBalance } from '../../hooks/useLedger'
+import { getEntryBalance } from '../../domain/ledger'
 
 export default function PersonRow({ person, entries = [], onClick }) {
   const activeEntries = entries.filter(entry => entry.status === 'active')

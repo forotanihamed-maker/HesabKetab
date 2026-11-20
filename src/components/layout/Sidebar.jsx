@@ -1,10 +1,11 @@
-import { Activity, BookOpen, LayoutDashboard, Users } from 'lucide-react'
+import { Activity, ShieldCheck, BookOpen, LayoutDashboard, Users } from 'lucide-react'
 import { PAGE } from '../../constants/app'
 
 const navigationItems = [
   { page: PAGE.HOME, label: 'نمای کلی', icon: LayoutDashboard },
   { page: PAGE.PEOPLE, label: 'اشخاص', icon: Users },
   { page: PAGE.ACTIVITY, label: 'تاریخچه فعالیت‌ها', icon: Activity },
+  { page: PAGE.BACKUP, label: 'پشتیبان‌گیری', icon: ShieldCheck },
 ]
 
 export default function Sidebar({ currentPage, onNavigate }) {

@@ -4,12 +4,13 @@ import SearchBox from '../components/common/SearchBox'
 import EmptyState from '../components/common/EmptyState'
 import PersonRow from '../components/people/PersonRow'
 import EventList from '../components/activity/EventList'
-import { toman, dateLabel } from '../utils'
+import { getEntryBalance } from '../domain/ledger'
+import { toman, dateLabel, formatNumber, sum } from '../utils'
 
 function DashboardEntries({ title, entries, people, direction, onOpenPerson }) {
   const isReceivable = direction === 'receivable'
   const Icon = isReceivable ? ArrowDownLeft : ArrowUpRight
-  const total = entries.reduce((sum, entry) => sum + Math.max(0, Number(entry.amount || 0) - (entry.payments || []).reduce((p, payment) => p + Number(payment.amount || 0), 0)), 0)
+  const total = sum(entries, getEntryBalance)
   return (
     <section className="content-card dashboard-accounts">
       <div className={`section-heading dashboard-section-heading ${isReceivable ? 'green-text' : 'orange-text'}`}>
@@ -19,8 +20,7 @@ function DashboardEntries({ title, entries, people, direction, onOpenPerson }) {
       {entries.length ? <div className="dashboard-entry-list">
         {entries.slice(0, 8).map(entry => {
           const person = people.find(item => item.id === entry.personId)
-          const paid = (entry.payments || []).reduce((sum, payment) => sum + Number(payment.amount || 0), 0)
-          const remaining = Math.max(0, Number(entry.amount || 0) - paid)
+          const remaining = getEntryBalance(entry)
           return <button className="dashboard-entry" key={entry.id} onClick={() => person && onOpenPerson(person.id)} disabled={!person}>
             <span className={`dashboard-entry-icon ${isReceivable ? 'receivable' : 'payable'}`}><Icon size={20}/></span>
             <span className="dashboard-entry-info"><strong>{person?.name || 'شخص حذف‌شده'}</strong><small>{entry.title}</small><small className="dashboard-entry-note">{dateLabel(entry.date)}{entry.note ? ` · ${entry.note}` : ''}</small></span>
@@ -47,8 +47,8 @@ export default function HomePage({ data, totals, people, search, onSearch, onOpe
     <section className="summary-grid">
       <SummaryCard title="مجموع طلب‌های فعال" value={toman(totals.receivables)} icon={<ArrowDownLeft />} tone="green" hint="مبالغی که باید دریافت شوند" />
       <SummaryCard title="مجموع بدهی‌های فعال" value={toman(totals.payables)} icon={<ArrowUpRight />} tone="orange" hint="مبالغی که باید پرداخت شوند" />
-      <SummaryCard title="اشخاص ثبت‌شده" value={new Intl.NumberFormat('fa-IR').format(data.people.length)} icon={<Users />} tone="blue" hint="افراد و طرف‌حساب‌ها" />
-      <SummaryCard title="حساب‌های فعال" value={new Intl.NumberFormat('fa-IR').format(totals.activeCount)} icon={<CreditCard />} tone="purple" hint="حساب‌های تسویه‌نشده" />
+      <SummaryCard title="اشخاص ثبت‌شده" value={formatNumber(data.people.length)} icon={<Users />} tone="blue" hint="افراد و طرف‌حساب‌ها" />
+      <SummaryCard title="حساب‌های فعال" value={formatNumber(totals.activeCount)} icon={<CreditCard />} tone="purple" hint="حساب‌های تسویه‌نشده" />
     </section>
     <DashboardEntries title="جزئیات طلب‌ها" entries={receivables} people={data.people} direction="receivable" onOpenPerson={onOpenPerson}/>
     <DashboardEntries title="جزئیات بدهی‌ها" entries={payables} people={data.people} direction="payable" onOpenPerson={onOpenPerson}/>

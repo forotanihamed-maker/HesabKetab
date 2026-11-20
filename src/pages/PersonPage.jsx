@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Activity, ArrowDownLeft, ArrowUpRight, CheckCircle2, ChevronLeft, CreditCard, Pencil, Plus } from 'lucide-react'
+import { Activity, ArrowDownLeft, ArrowUpRight, ChevronLeft, CreditCard, Pencil, Plus } from 'lucide-react'
 import SummaryCard from '../components/common/SummaryCard'
 import EmptyState from '../components/common/EmptyState'
 import EntryCard from '../components/entries/EntryCard'
 import EventList from '../components/activity/EventList'
+import { getEntryBalance } from '../domain/ledger'
 import { toman } from '../utils'
 
 export default function PersonPage({ person, entries, events, receivable, payable, onBack, onAddEntry, onAddPayment, onEditEntry, onSettle, onDeleteEntry, onDeletePayment, onEditPerson }) {
@@ -14,7 +15,7 @@ export default function PersonPage({ person, entries, events, receivable, payabl
   const receivableEntries = visibleEntries.filter(entry => entry.direction === 'receivable')
   const payableEntries = visibleEntries.filter(entry => entry.direction === 'payable')
   const renderEntryList = list => list.length ? <div className="entry-list">{list.map(entry => (
-    <EntryCard key={entry.id} entry={entry} balance={Math.max(0, Number(entry.amount) - (entry.payments || []).reduce((total, payment) => total + Number(payment.amount), 0))}
+    <EntryCard key={entry.id} entry={entry} balance={getEntryBalance(entry)}
       onPayment={() => onAddPayment(entry)} onEdit={() => onEditEntry(entry)} onSettle={() => onSettle(entry)}
       onDelete={() => onDeleteEntry(entry)} onDeletePayment={payment => onDeletePayment(entry, payment)} />
   ))}</div> : <EmptyState icon={<CreditCard />} title="حسابی در این بخش نیست" text="حساب‌های این دسته در این فیلتر نمایش داده نمی‌شوند." />

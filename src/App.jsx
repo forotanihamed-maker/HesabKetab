@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage'
 import PeoplePage from './pages/PeoplePage'
 import PersonPage from './pages/PersonPage'
 import ActivityPage from './pages/ActivityPage'
+import BackupPage from './pages/BackupPage'
 import ModalHost from './components/modals/ModalHost'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
   }
   const ledger = useLedger(notify, navigateToPerson)
   const selectedPerson = ledger.data.people.find(person => person.id === selectedPersonId)
+  const selectedPersonTotals = selectedPerson ? ledger.getPersonTotals(selectedPerson.id) : null
   const filteredPeople = useMemo(() => {
     const query = search.trim().toLocaleLowerCase()
     return ledger.data.people.filter(person => person.name.toLocaleLowerCase().includes(query))
@@ -74,8 +76,8 @@ export default function App() {
             person={selectedPerson}
             entries={ledger.data.entries.filter(entry => entry.personId === selectedPerson.id)}
             events={ledger.data.events.filter(event => event.personId === selectedPerson.id)}
-            receivable={ledger.getPersonTotals(selectedPerson.id).receivables}
-            payable={ledger.getPersonTotals(selectedPerson.id).payables}
+            receivable={selectedPersonTotals.receivables}
+            payable={selectedPersonTotals.payables}
             onBack={() => navigate(PAGE.PEOPLE)}
             onAddEntry={() => openModal('entry', { personId: selectedPerson.id })}
             onAddPayment={entry => openModal('payment', { entry })}
@@ -85,6 +87,7 @@ export default function App() {
             onEditPerson={() => openModal('editPerson', { person: selectedPerson })}
           />}
           {page === PAGE.ACTIVITY && <ActivityPage events={ledger.data.events} people={ledger.data.people} />}
+          {page === PAGE.BACKUP && <BackupPage data={ledger.data} onImport={ledger.importData} />}
         </main>
       </div>
       <MobileNavigation currentPage={page} onNavigate={navigate} />
