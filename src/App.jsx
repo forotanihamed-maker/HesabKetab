@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { PAGE } from './constants/app'
+import { getEntryBalance } from './domain/ledger'
 import { useLedger } from './hooks/useLedger'
 import AppHeader from './components/layout/AppHeader'
 import Sidebar from './components/layout/Sidebar'
@@ -32,10 +33,8 @@ export default function App() {
   const ledger = useLedger(notify, navigateToPerson)
   const selectedPerson = ledger.data.people.find(person => person.id === selectedPersonId)
   const selectedPersonTotals = selectedPerson ? ledger.getPersonTotals(selectedPerson.id) : null
-  const filteredPeople = useMemo(() => {
-    const query = search.trim().toLocaleLowerCase()
-    return ledger.data.people.filter(person => person.name.toLocaleLowerCase().includes(query))
-  }, [ledger.data.people, search])
+  const query = search.trim().toLocaleLowerCase()
+  const filteredPeople = ledger.data.people.filter(person => person.name.toLocaleLowerCase().includes(query))
   const openModal = (type, payload = {}) => setModal({ type, ...payload })
   const closeModal = () => setModal(null)
 
@@ -54,6 +53,19 @@ export default function App() {
   }
   function submitPersonEdit(person, form) {
     if (ledger.updatePerson(person, form)) closeModal()
+  }
+  function confirmSettle(entry) {
+    const remaining = getEntryBalance(entry)
+    const question = remaining > 0
+      ? `مانده ${new Intl.NumberFormat('fa-IR').format(remaining)} تومان به‌عنوان پرداخت نهایی ثبت و حساب تسویه شود؟`
+      : 'این حساب تسویه و از فهرست فعال خارج شود؟'
+    if (window.confirm(question)) ledger.settleEntry(entry)
+  }
+  function confirmDeleteEntry(entry) {
+    if (window.confirm('این حساب و پرداخت‌های مرتبط با آن حذف شوند؟')) ledger.deleteEntry(entry)
+  }
+  function confirmDeletePayment(entry, payment) {
+    if (window.confirm('این پرداخت حذف شود؟')) ledger.deletePayment(entry, payment)
   }
 
   return (
@@ -82,8 +94,8 @@ export default function App() {
             onAddEntry={() => openModal('entry', { personId: selectedPerson.id })}
             onAddPayment={entry => openModal('payment', { entry })}
             onEditEntry={entry => openModal('editEntry', { entry })}
-            onSettle={ledger.settleEntry} onDeleteEntry={ledger.deleteEntry}
-            onDeletePayment={ledger.deletePayment}
+            onSettle={confirmSettle} onDeleteEntry={confirmDeleteEntry}
+            onDeletePayment={confirmDeletePayment}
             onEditPerson={() => openModal('editPerson', { person: selectedPerson })}
           />}
           {page === PAGE.ACTIVITY && <ActivityPage events={ledger.data.events} people={ledger.data.people} />}

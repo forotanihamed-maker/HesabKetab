@@ -1,5 +1,7 @@
 import { DIRECTION, ENTRY_STATUS, SCHEMA_VERSION } from '../constants/app'
-import { sum, today, uid } from '../utils'
+import { sum } from '../utils/array'
+import { today } from '../utils/date'
+import { uid } from '../utils/id'
 
 // Pure ledger rules. No React and no browser APIs here, so everything can be tested on its own.
 
