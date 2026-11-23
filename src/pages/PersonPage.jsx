@@ -4,16 +4,16 @@ import SummaryCard from '../components/common/SummaryCard'
 import EmptyState from '../components/common/EmptyState'
 import EntryCard from '../components/entries/EntryCard'
 import EventList from '../components/activity/EventList'
-import { getEntryBalance } from '../domain/ledger'
+import { ENTRY_STATUS } from '../constants/app'
+import { getEntryBalance, groupByDirection } from '../domain/ledger'
 import { toman } from '../utils'
 
 export default function PersonPage({ person, entries, events, receivable, payable, onBack, onAddEntry, onAddPayment, onEditEntry, onSettle, onDeleteEntry, onDeletePayment, onEditPerson }) {
-  const [activeTab, setActiveTab] = useState('active')
-  const activeEntries = entries.filter(entry => entry.status === 'active')
-  const settledEntries = entries.filter(entry => entry.status === 'settled')
-  const visibleEntries = activeTab === 'active' ? activeEntries : activeTab === 'settled' ? settledEntries : entries
-  const receivableEntries = visibleEntries.filter(entry => entry.direction === 'receivable')
-  const payableEntries = visibleEntries.filter(entry => entry.direction === 'payable')
+  const [activeTab, setActiveTab] = useState(ENTRY_STATUS.ACTIVE)
+  const activeEntries = entries.filter(entry => entry.status === ENTRY_STATUS.ACTIVE)
+  const settledEntries = entries.filter(entry => entry.status === ENTRY_STATUS.SETTLED)
+  const visibleEntries = activeTab === ENTRY_STATUS.ACTIVE ? activeEntries : activeTab === ENTRY_STATUS.SETTLED ? settledEntries : entries
+  const { receivables: receivableEntries, payables: payableEntries } = groupByDirection(visibleEntries)
   const renderEntryList = list => list.length ? <div className="entry-list">{list.map(entry => (
     <EntryCard key={entry.id} entry={entry} balance={getEntryBalance(entry)}
       onPayment={() => onAddPayment(entry)} onEdit={() => onEditEntry(entry)} onSettle={() => onSettle(entry)}
@@ -41,8 +41,8 @@ export default function PersonPage({ person, entries, events, receivable, payabl
 
       <section className="content-card">
         <div className="tabs">
-          <button className={activeTab === 'active' ? 'active' : ''} onClick={() => setActiveTab('active')}>فعال ({activeEntries.length})</button>
-          <button className={activeTab === 'settled' ? 'active' : ''} onClick={() => setActiveTab('settled')}>تسویه‌شده ({settledEntries.length})</button>
+          <button className={activeTab === ENTRY_STATUS.ACTIVE ? 'active' : ''} onClick={() => setActiveTab(ENTRY_STATUS.ACTIVE)}>فعال ({activeEntries.length})</button>
+          <button className={activeTab === ENTRY_STATUS.SETTLED ? 'active' : ''} onClick={() => setActiveTab(ENTRY_STATUS.SETTLED)}>تسویه‌شده ({settledEntries.length})</button>
           <button className={activeTab === 'all' ? 'active' : ''} onClick={() => setActiveTab('all')}>همه ({entries.length})</button>
         </div>
         <div className="person-entry-groups">

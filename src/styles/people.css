@@ -116,7 +116,7 @@
   .person-row-balances { font-size: 10px; }
 
   .person-heading { flex-wrap: wrap; }
-  .person-heading .outline-btn { margin-right: auto; }   /* pushes the edit button to the far side */
+  .person-heading .outline-btn { margin-inline-start: auto; }   /* pushes the edit button to the far side */
 
   .person-stats { gap: 9px; }
   .person-stats .summary-card strong { font-size: 12px; }

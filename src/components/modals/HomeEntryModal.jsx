@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { DIRECTION } from '../../constants/app'
 import { today } from '../../utils'
 import ModalShell from './ModalShell'
 import FormField from './FormField'
@@ -10,7 +11,7 @@ export default function HomeEntryModal({ people, onClose, onSubmit }) {
   const [personId, setPersonId] = useState('')
   const [newPerson, setNewPerson] = useState(false)
   const [name, setName] = useState('')
-  const [form, setForm] = useState({ direction: 'receivable', title: '', amount: '', date: today(), note: '' })
+  const [form, setForm] = useState({ direction: DIRECTION.RECEIVABLE, title: '', amount: '', date: today(), note: '' })
   const matches = useMemo(() => people.filter(p => p.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())), [people, query])
   const update = (key, value) => setForm(current => ({ ...current, [key]: value }))
   function submit(e) { e.preventDefault(); onSubmit({ ...form, personId, newPerson, name }) }
@@ -22,7 +23,7 @@ export default function HomeEntryModal({ people, onClose, onSubmit }) {
         {query.trim() && !people.some(p=>p.name.trim().toLocaleLowerCase()===query.trim().toLocaleLowerCase()) && <button type="button" className="quick-new-person" onClick={()=>{setNewPerson(true);setName(query.trim())}}>+ ثبت «{query.trim()}» به‌عنوان شخص جدید</button>}</div>
       </> : <><input value={name} onChange={e=>setName(e.target.value)} placeholder="نام شخص جدید" required/><button className="text-btn" type="button" onClick={()=>{setNewPerson(false);setQuery(name);setName('')}}>انتخاب از اشخاص ثبت‌شده</button></>}
     </FormField>
-    <FormField label="نوع حساب"><div className="segmented"><button type="button" className={form.direction==='receivable'?'selected green':''} onClick={()=>update('direction','receivable')}>طلب (دریافت)</button><button type="button" className={form.direction==='payable'?'selected orange':''} onClick={()=>update('direction','payable')}>بدهی (پرداخت)</button></div></FormField>
+    <FormField label="نوع حساب"><div className="segmented"><button type="button" className={form.direction===DIRECTION.RECEIVABLE?'selected green':''} onClick={()=>update('direction',DIRECTION.RECEIVABLE)}>طلب (دریافت)</button><button type="button" className={form.direction===DIRECTION.PAYABLE?'selected orange':''} onClick={()=>update('direction',DIRECTION.PAYABLE)}>بدهی (پرداخت)</button></div></FormField>
     <FormField label="عنوان / دلیل" required><input value={form.title} onChange={e=>update('title',e.target.value)} placeholder="مثلاً خرید دمنوش" required/></FormField>
     <FormField label="مبلغ (تومان)" required><AmountInput value={form.amount} onChange={value=>update('amount',value)} required /></FormField>
     <FormField label="تاریخ (شمسی)" required><PersianDateInput value={form.date} onChange={value=>update('date',value)} required /></FormField>

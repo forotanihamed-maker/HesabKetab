@@ -1,12 +1,10 @@
 import { ChevronLeft } from 'lucide-react'
-import { sum, toman } from '../../utils'
-import { getEntryBalance } from '../../domain/ledger'
+import { toman } from '../../utils'
+import { summarizeEntries } from '../../domain/ledger'
 
 export default function PersonRow({ person, entries = [], onClick }) {
-  const activeEntries = entries.filter(entry => entry.status === 'active')
-  const receivable = sum(activeEntries.filter(entry => entry.direction === 'receivable'), getEntryBalance)
-  const payable = sum(activeEntries.filter(entry => entry.direction === 'payable'), getEntryBalance)
-  const settledCount = entries.filter(entry => entry.status === 'settled').length
+  const { receivables, payables, activeCount } = summarizeEntries(entries)
+  const settledCount = entries.length - activeCount
 
   return (
     <button className="person-row" onClick={onClick}>
@@ -16,9 +14,9 @@ export default function PersonRow({ person, entries = [], onClick }) {
         <small>{person.phone || 'بدون شماره تماس'} · {entries.length ? `${entries.length} حساب ( ${settledCount} تسویه‌شده )` : 'ثبت‌شده در دفتر اشخاص'}</small>
       </div>
       <div className="person-row-balances">
-        {activeEntries.length ? <>
-          <span className="green-text">طلب {toman(receivable)}</span>
-          <span className="orange-text">بدهی {toman(payable)}</span>
+        {activeCount ? <>
+          <span className="green-text">طلب {toman(receivables)}</span>
+          <span className="orange-text">بدهی {toman(payables)}</span>
         </> : entries.length ? <span className="muted">همه حساب‌ها تسویه</span> : <span className="muted">حسابی ثبت نشده</span>}
       </div>
       <ChevronLeft className="row-chevron" size={18} />

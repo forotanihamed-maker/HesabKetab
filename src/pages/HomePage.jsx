@@ -4,11 +4,12 @@ import SearchBox from '../components/common/SearchBox'
 import EmptyState from '../components/common/EmptyState'
 import PersonRow from '../components/people/PersonRow'
 import EventList from '../components/activity/EventList'
-import { getEntryBalance } from '../domain/ledger'
+import { getEntryBalance, groupByDirection } from '../domain/ledger'
+import { DIRECTION, ENTRY_STATUS } from '../constants/app'
 import { toman, dateLabel, formatNumber, sum } from '../utils'
 
 function DashboardEntries({ title, entries, people, direction, onOpenPerson }) {
-  const isReceivable = direction === 'receivable'
+  const isReceivable = direction === DIRECTION.RECEIVABLE
   const Icon = isReceivable ? ArrowDownLeft : ArrowUpRight
   const total = sum(entries, getEntryBalance)
   return (
@@ -35,9 +36,9 @@ function DashboardEntries({ title, entries, people, direction, onOpenPerson }) {
 
 export default function HomePage({ data, totals, people, search, onSearch, onOpenPerson, onAddPerson, onShowPeople, onQuickEntry }) {
   const recentEvents = data.events.slice(0, 5)
-  const activeEntries = data.entries.filter(entry => entry.status === 'active')
-  const receivables = activeEntries.filter(entry => entry.direction === 'receivable').sort((a,b) => String(b.date).localeCompare(String(a.date)))
-  const payables = activeEntries.filter(entry => entry.direction === 'payable').sort((a,b) => String(b.date).localeCompare(String(a.date)))
+  const { receivables, payables } = groupByDirection(data.entries, ENTRY_STATUS.ACTIVE)
+  receivables.sort((a, b) => String(b.date).localeCompare(String(a.date)))
+  payables.sort((a, b) => String(b.date).localeCompare(String(a.date)))
 
   return <>
     <div className="page-heading">
@@ -50,8 +51,8 @@ export default function HomePage({ data, totals, people, search, onSearch, onOpe
       <SummaryCard title="اشخاص ثبت‌شده" value={formatNumber(data.people.length)} icon={<Users />} tone="blue" hint="افراد و طرف‌حساب‌ها" />
       <SummaryCard title="حساب‌های فعال" value={formatNumber(totals.activeCount)} icon={<CreditCard />} tone="purple" hint="حساب‌های تسویه‌نشده" />
     </section>
-    <DashboardEntries title="جزئیات طلب‌ها" entries={receivables} people={data.people} direction="receivable" onOpenPerson={onOpenPerson}/>
-    <DashboardEntries title="جزئیات بدهی‌ها" entries={payables} people={data.people} direction="payable" onOpenPerson={onOpenPerson}/>
+    <DashboardEntries title="جزئیات طلب‌ها" entries={receivables} people={data.people} direction={DIRECTION.RECEIVABLE} onOpenPerson={onOpenPerson}/>
+    <DashboardEntries title="جزئیات بدهی‌ها" entries={payables} people={data.people} direction={DIRECTION.PAYABLE} onOpenPerson={onOpenPerson}/>
     <section className="content-card">
       <div className="section-heading"><div><h2>اشخاص</h2><p>برای مشاهده جزئیات و حساب هر شخص انتخاب کنید.</p></div><button className="text-btn" onClick={onShowPeople}>مشاهده همه <ChevronLeft size={16} /></button></div>
       <SearchBox value={search} onChange={onSearch} placeholder="جست‌وجوی نام شخص..." />

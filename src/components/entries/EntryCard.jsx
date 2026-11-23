@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { ArrowDownLeft, ArrowUpRight, CheckCircle2, CirclePlus, Pencil, Trash2 } from 'lucide-react'
+import { DIRECTION, ENTRY_STATUS } from '../../constants/app'
 import { dateLabel, toman } from '../../utils'
 
 export default function EntryCard({ entry, balance, onPayment, onEdit, onSettle, onDelete, onDeletePayment }) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const isReceivable = entry.direction === 'receivable'
+  const isReceivable = entry.direction === DIRECTION.RECEIVABLE
   const DirectionIcon = isReceivable ? ArrowDownLeft : ArrowUpRight
 
   return (
@@ -15,7 +16,7 @@ export default function EntryCard({ entry, balance, onPayment, onEdit, onSettle,
           <div className="entry-title-line">
             <strong>{entry.title}</strong>
             <span className={`status-pill ${entry.status}`}>
-              {entry.status === 'settled' ? 'تسویه‌شده' : isReceivable ? 'طلب' : 'بدهی'}
+              {entry.status === ENTRY_STATUS.SETTLED ? 'تسویه‌شده' : isReceivable ? 'طلب' : 'بدهی'}
             </span>
           </div>
           <small>{dateLabel(entry.date)}{entry.note ? ` · ${entry.note}` : ''}</small>
@@ -34,7 +35,7 @@ export default function EntryCard({ entry, balance, onPayment, onEdit, onSettle,
         <button className="subtle-btn" onClick={() => setIsExpanded(value => !value)}>
           {isExpanded ? 'بستن جزئیات' : `پرداخت‌ها (${(entry.payments || []).length})`}
         </button>
-        {entry.status === 'active' && (
+        {entry.status === ENTRY_STATUS.ACTIVE && (
           <div className="entry-footer-actions">
             <button className="subtle-btn" onClick={onPayment}><CirclePlus size={15} /> ثبت پرداخت</button>
             <button className="settle-btn" onClick={onSettle}><CheckCircle2 size={15} /> تسویه مستقیم</button>

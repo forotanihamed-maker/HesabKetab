@@ -28,6 +28,15 @@ export function summarizeEntries(entries) {
   }
 }
 
+// Splits entries into receivables/payables, optionally keeping only one status.
+export function groupByDirection(entries, status = null) {
+  const list = status ? entries.filter(entry => entry.status === status) : entries
+  return {
+    receivables: list.filter(entry => entry.direction === DIRECTION.RECEIVABLE),
+    payables: list.filter(entry => entry.direction === DIRECTION.PAYABLE),
+  }
+}
+
 // Returns a positive number, or null when the value is not a valid amount.
 export function parseAmount(value) {
   const amount = Number(value)
@@ -94,19 +103,22 @@ function normalizeEntry(entry) {
 // Turns anything read from storage or from a backup file into a safe, complete ledger object.
 export function normalizeLedger(raw) {
   const source = isObject(raw) ? raw : {}
+  const people = asArray(source.people)
+    .filter(person => isObject(person) && person.id && String(person.name ?? '').trim())
+    .map(person => ({
+      ...person,
+      id: String(person.id),
+      name: String(person.name).trim(),
+      phone: String(person.phone ?? ''),
+      note: String(person.note ?? ''),
+    }))
+  const personIds = new Set(people.map(person => person.id))
   return {
     schemaVersion: SCHEMA_VERSION,
-    people: asArray(source.people)
-      .filter(person => isObject(person) && person.id && String(person.name ?? '').trim())
-      .map(person => ({
-        ...person,
-        id: String(person.id),
-        name: String(person.name).trim(),
-        phone: String(person.phone ?? ''),
-        note: String(person.note ?? ''),
-      })),
+    people,
+    // Drop entries whose person is missing so corrupted backups cannot create orphan accounts.
     entries: asArray(source.entries)
-      .filter(entry => isObject(entry) && entry.id && entry.personId)
+      .filter(entry => isObject(entry) && entry.id && entry.personId && personIds.has(String(entry.personId)))
       .map(normalizeEntry),
     events: asArray(source.events).filter(event => isObject(event) && event.id && event.text),
   }
